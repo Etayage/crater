@@ -371,6 +371,17 @@ class Estimate extends Model implements HasMedia
         ];
     }
 
+    public function getTotalDiscountAmount()
+    {
+        $amount = 0;
+            
+        foreach ($this->items as $item) {
+            $amount += $item->discount_val;
+        }
+    
+        return $amount;
+    }
+
     public function getPDFData()
     {
         $taxes = collect();
@@ -395,14 +406,18 @@ class Estimate extends Model implements HasMedia
 
         $company = Company::find($this->company_id);
         $locale = CompanySetting::getSetting('language', $company->id);
-        $customFields = CustomField::where('model_type', 'Item')->get();
+        $customFields = CustomField::where('model_type', 'Items')->get();
+        $titre = CustomField::where('model_type', 'Estimate')->where('name', 'titre')->get();
 
         App::setLocale($locale);
 
-        $logo = $company->logo_path;
+        //$logo = $company->logo_path;
+        $logo = $company->getLogoAttribute();
 
         view()->share([
             'estimate' => $this,
+            'owner' => $this->creator()->get()[0],
+            'company' => $company,
             'customFields' => $customFields,
             'logo' => $logo ?? null,
             'company_address' => $this->getCompanyAddress(),
@@ -410,6 +425,9 @@ class Estimate extends Model implements HasMedia
             'billing_address' => $this->getCustomerBillingAddress(),
             'notes' => $this->getNotes(),
             'taxes' => $taxes,
+            'titre' => $this->getCustomFieldValueBySlug("CUSTOM_ESTIMATE_TITLE"),
+            'company_siret' => $this->company->getCustomFieldValueBySlug("CUSTOM_COMPANY_SIRET"), 
+            'customer_siret' => $this->customer->getCustomFieldValueBySlug("CUSTOM_CUSTOMER_SIRET"), 
         ]);
 
         if (request()->has('preview')) {

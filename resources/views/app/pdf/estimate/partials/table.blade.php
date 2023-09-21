@@ -7,7 +7,7 @@
         @endforeach
         <th class="pr-20 text-right item-table-heading">@lang('pdf_quantity_label')</th>
         <th class="pr-20 text-right item-table-heading">@lang('pdf_price_label')</th>
-        @if($estimate->discount_per_item === 'YES')
+        @if($estimate->discount_per_item === 'YES' && $estimate->getTotalDiscountAmount() > 0)
         <th class="pl-10 text-right item-table-heading">@lang('pdf_discount_label')</th>
         @endif
         <th class="text-right item-table-heading">@lang('pdf_amount_label')</th>
@@ -50,7 +50,7 @@
             >
                 {!! format_money_pdf($item->price, $estimate->customer->currency) !!}
             </td>
-            @if($estimate->discount_per_item === 'YES')
+            @if($estimate->discount_per_item === 'YES'  && $estimate->getTotalDiscountAmount() > 0)
                 <td class="pl-10 text-right item-cell" style="vertical-align: top;">
                     @if($item->discount_type === 'fixed')
                         {!! format_money_pdf($item->discount_val, $estimate->customer->currency) !!}
