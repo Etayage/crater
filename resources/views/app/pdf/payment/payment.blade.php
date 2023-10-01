@@ -22,62 +22,80 @@
             border-collapse: collapse;
         }
 
+
         hr {
             color: rgba(0, 0, 0, 0.2);
             border: 0.5px solid #EAF1FB;
-            margin: 50px 0px;
         }
 
-        /* -- Heeader -- */
+       /* -- Header -- */
 
-        .header-container {
-            /* position: absolute; */
+        .header-container {            
+
+            background: #0E2F45;
+            position: absolute;
             width: 100%;
-            padding: 0 30px;
-            margin-bottom: 50px;
-            /* height: 150px;
+            height: 141px;
             left: 0px;
-            top: -60px; */
+            top: -60px;
         }
 
-        /* .header-section-left {
+        .header-section-left {
             padding-top: 45px;
             padding-bottom: 45px;
             padding-left: 30px;
-            display:inline-block;
-            width:30%;
-        } */
+            display: inline-block;
+            width: 30%;
+        }
 
         .header-logo {
-            /* position: absolute; */
-            text-transform: capitalize;
-            color: #817AE3;
-            padding-top: 0px;
-        }
-
-        .company-address-container {
-            width: 50%;
-            text-transform: capitalize;
-            padding-left: 80px;
-            margin-bottom: 2px;
-        }
-
-        /* .header-section-right {
-            display: inline-block;
             position: absolute;
-            right: 0;
-            padding: 15px 30px 15px 0px;
-            float: right;
-        } */
+
+            text-transform: capitalize;
+            color: #fff;
+        }
 
         .header-section-right {
+            display: inline-block;
+            width: 70%;
+            float: right;
+            padding: 20px 30px 20px 0px;
             text-align: right;
+            color: white;
         }
 
         .header {
             font-size: 20px;
             color: rgba(0, 0, 0, 0.7);
         }
+
+        /* -- invoice Details -- */
+
+        .invoice-details-container {
+            text-align: center;
+            width: 70%;
+        }
+
+        .invoice-details-container h1 {
+            margin: 0;
+            font-size: 24px;
+            line-height: 36px;
+            text-align: right;
+            font-family: "DejaVu Sans";
+        }
+
+        .invoice-details-container h4 {
+            margin: 0;
+            font-size: 10px;
+            line-height: 15px;
+            text-align: right;
+        }
+
+        .invoice-details-container h3 {
+            margin-bottom: 1px;
+            margin-top: 0;
+        }
+
 
         /* -- Company Address -- */
 
@@ -100,11 +118,23 @@
             color: #595959;
             word-wrap: break-word;
         }
+        /* -- Address -- */
 
         .content-wrapper {
             display: block;
-            height: 200px;
+            margin-top: 60px;
+            padding-bottom: 20px;
         }
+
+        .address-container {
+            display: block;
+            padding-bottom: 10px; 
+            margin-bottom: 10px;
+
+            margin-top: 10px;
+             background: #f2f0e2;
+        }
+
 
         .main-content {
             display: inline-block;
@@ -112,11 +142,19 @@
         }
 
         /* -- Customer Address -- */
-        .customer-address-container {
-            display: block;
-            float: left;
-            width: 40%;
+        .company-address-container {
             padding: 0 0 0 30px;
+            display: inline;
+            float: left;
+            width: 30%;
+        }
+
+        .company-address-container {
+            padding-left: 30px;
+            float: left;
+            width: 30%;
+            text-transform: capitalize;
+            margin-bottom: 2px;
         }
 
         /* -- Shipping -- */
@@ -147,7 +185,9 @@
 
         .billing-address-container {
             display: block;
-            float: left;
+            /* position: absolute; */
+            float: right;
+            padding: 0 40px 0 0;
         }
 
         .billing-address-container--right {
@@ -181,12 +221,12 @@
         /* -- Payment Details -- */
 
         .payment-details-container {
-            display: inline;
-            position: absolute;
-            width: 40%;
+            width: 50%;
             height: 120px;
-            left: 440px;
-            padding: 5px 10px 0 0;
+            left: 140px;
+
+            float: right;
+            padding: 12px 15px 15px 15px;
         }
 
         .attribute-label {
@@ -247,9 +287,10 @@
         /* -- Total Display Box -- */
 
         .total-display-box {
+        position:relative;
             min-width: 315px;
-            display: block;
-            margin-right: 30px;
+
+            margin-right:15px;
             background: #F9FBFF;
             border: 1px solid #EAF1FB;
             box-sizing: border-box;
@@ -283,83 +324,99 @@
 </head>
 
 <body>
+
+
     <div class="header-container">
-        <table width="100%">
+        <table width="100%">       
             <tr>
                 @if ($logo)
-                    <td width="50%" class="header-section-left">
-                        <img style="height: 50px;" class="header-logo" src="{{ $logo }}" alt="Company Logo">
-                    @else
-                        @if ($payment->customer)
-                    <td class="header-section-left" style="padding-top:0px;">
-                        <h1 class="header-logo"> {{ $payment->customer->company->name }} </h1>
-                @endif
-                @endif
+                <td width="60%" class="header-section-left">
+                    <a href='https://www.etayage.fr' target="_blank"><img class="header-logo" style="height: 50px;" src="{{ $logo }}" alt="Company Logo"></a>
                 </td>
-                <td width="50%" class="header-section-right company-details company-address">
-                    {!! $company_address !!}
+                @else
+                <td width="60%" class="header-section-left" style="padding-top: 0px;">
+                    @if ($payment->customer->company)
+                        <h2 class="header-logo"> {{ $payment->customer->company->name }}</h2>
+                    @endif
+                </td>
+                @endif
+                <td width="40%" class="header-section-right invoice-details-container">
+                    <h1>@lang('pdf_payment_receipt_label')</h1>
+                    <h4>@lang('pdf_payment_number') {{ $payment->payment_number }}</h4>
+                    <h4>{{ $payment->formattedInvoiceDate }}</h4>
                 </td>
             </tr>
         </table>
     </div>
+    <hr>
 
-    <hr style="border: 0.620315px solid #E8E8E8;">
-
-    <p class="content-heading">
-        <span>@lang('pdf_payment_receipt_label')</span>
-    </p>
 
     <div class="content-wrapper">
-        <div class="main-content">
-            <div class="customer-address-container">
-                <div class="billing-address-container billing-address">
+        <div class="address-container">
+
+            <div class="company-address-container company-address">
+            {!! $company_address !!}
+            </div>
+
+            <div class="billing-address-container billing-address" style="float:right; margin-right:30px;">
+                <div style="float:right;">
                     @if ($billing_address)
                         @lang('pdf_received_from')
                         {!! $billing_address !!}
-                    @endif
+                    @endif         
                 </div>
-                <div class="billing-address-container--right">
-                </div>
-                <div style="clear: both;"></div>
             </div>
 
-            <div class="payment-details-container">
-                <table width="100%">
-                    <tr>
-                        <td class="attribute-label">@lang('pdf_payment_date')</td>
-                        <td class="attribute-value"> &nbsp;{{ $payment->formattedPaymentDate }}</td>
-                    </tr>
-                    <tr>
-                        <td class="attribute-label">@lang('pdf_payment_number')</td>
-                        <td class="attribute-value"> &nbsp;{{ $payment->payment_number }}</td>
-                    </tr>
-                    <tr>
-                        <td class="attribute-label">@lang('pdf_payment_mode')</td>
-                        <td class="attribute-value">
-                            &nbsp;{{ $payment->paymentMethod ? $payment->paymentMethod->name : '-' }}</td>
-                    </tr>
-                    @if ($payment->invoice && $payment->invoice->invoice_number)
-                        <tr>
-                            <td class="attribute-label">@lang('pdf_invoice_label')</td>
-                            <td class="attribute-value"> &nbsp;{{ $payment->invoice->invoice_number }}</td>
-                        </tr>
-                    @endif
-                </table>
-            </div>
+            <div style="clear: both;"></div>
         </div>
-        <div style="clear: both;"></div>
-    </div>
-    <div class="total-display-box">
-        <p class="total-display-label">@lang('pdf_payment_amount_received_label')</p>
-        <span class="amount">{!! format_money_pdf($payment->amount, $payment->customer->currency) !!}</span>
-    </div>
-    <div class="notes">
-        @if ($notes)
-            <div class="notes-label">
-                @lang('pdf_notes')
-            </div>
-            {!! $notes !!}
-        @endif
+
+
+    
+        <div class="payment-details-container">
+            <table width="100%">
+                <tr>
+                    <td class="attribute-label">@lang('pdf_payment_date')</td>
+                    <td class="attribute-value"> &nbsp;{{ $payment->formattedPaymentDate }}</td>
+                </tr>
+                <tr>
+                    <td class="attribute-label">@lang('pdf_payment_number')</td>
+                    <td class="attribute-value"> &nbsp;{{ $payment->payment_number }}</td>
+                </tr>
+                <tr>
+                    <td class="attribute-label">@lang('pdf_payment_mode')</td>
+                    <td class="attribute-value">
+                        &nbsp;{{ $payment->paymentMethod ? $payment->paymentMethod->name : '-' }}</td>
+                </tr>
+                @if ($payment->invoice && $payment->invoice->invoice_number)
+                    <tr>
+                        <td class="attribute-label">@lang('pdf_invoice_label')</td>
+                        <td class="attribute-value"> &nbsp;{{ $payment->invoice->invoice_number }}</td>
+                    </tr>
+                @endif
+            </table>
+        </div>
+
+                <div style="clear: both;"></div>
+
+
+        <div class="total-display-box">
+            <p class="total-display-label">@lang('pdf_payment_amount_received_label')</p>
+            <span class="amount">{!! format_money_pdf($payment->amount, $payment->customer->currency) !!}</span>
+        </div>
+                <div style="clear: both;"></div>
+
+        
+        <div class="notes">
+            @if ($notes)
+                <div class="notes-label">
+                    @lang('pdf_notes')
+                </div>
+                {!! $notes !!}
+            @endif
+        </div>
+        
+                <div style="clear: both;"></div>
+
     </div>
 </body>
 
