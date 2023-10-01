@@ -374,11 +374,11 @@ class Estimate extends Model implements HasMedia
     public function getTotalDiscountAmount()
     {
         $amount = 0;
-            
+
         foreach ($this->items as $item) {
             $amount += $item->discount_val;
         }
-    
+
         return $amount;
     }
 
@@ -426,8 +426,8 @@ class Estimate extends Model implements HasMedia
             'notes' => $this->getNotes(),
             'taxes' => $taxes,
             'titre' => $this->getCustomFieldValueBySlug("CUSTOM_ESTIMATE_TITLE"),
-            'company_siret' => $this->company->getCustomFieldValueBySlug("CUSTOM_COMPANY_SIRET"), 
-            'customer_siret' => $this->customer->getCustomFieldValueBySlug("CUSTOM_CUSTOMER_SIRET"), 
+            'company_siret' => $this->company->getCustomFieldValueBySlug("CUSTOM_COMPANY_SIRET"),
+            'customer_siret' => $this->customer->getCustomFieldValueBySlug("CUSTOM_CUSTOMER_SIRET"),
         ]);
 
         if (request()->has('preview')) {

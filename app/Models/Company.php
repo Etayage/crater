@@ -2,20 +2,20 @@
 
 namespace Crater\Models;
 
+use Crater\Traits\HasCustomFieldsTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Silber\Bouncer\BouncerFacade;
 use Silber\Bouncer\Database\Role;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Crater\Traits\HasCustomFieldsTrait;
 
 class Company extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
     use HasFactory;
-        use HasCustomFieldsTrait;
+    use HasCustomFieldsTrait;
 
     protected $guarded = [
         'id'
