@@ -15,7 +15,9 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libzip-dev \
     libmagickwand-dev \
-    mariadb-client
+    mariadb-client \
+    postgresql-client \
+    libpq-dev
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -24,7 +26,7 @@ RUN pecl install imagick \
     && docker-php-ext-enable imagick
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
+RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring zip exif pcntl bcmath gd
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
