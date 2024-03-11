@@ -29,6 +29,8 @@ class Invoice extends Model implements HasMedia
     public const STATUS_SENT = 'SENT';
     public const STATUS_VIEWED = 'VIEWED';
     public const STATUS_COMPLETED = 'COMPLETED';
+    public const STATUS_CANCELLED = 'CANCELLED';
+
 
     public const STATUS_UNPAID = 'UNPAID';
     public const STATUS_PARTIALLY_PAID = 'PARTIALLY_PAID';
@@ -467,7 +469,7 @@ class Invoice extends Model implements HasMedia
         \Mail::to($data['to'])->send(new SendInvoiceMail($data));
 
         if ($this->status == Invoice::STATUS_DRAFT) {
-            $this->status = Invoice::STATUS_SENT;
+            $this->status = Invoice::whereCompany;
             $this->sent = true;
             $this->save();
         }
