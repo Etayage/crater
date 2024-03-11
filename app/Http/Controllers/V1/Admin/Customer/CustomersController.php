@@ -7,6 +7,7 @@ use Crater\Http\Requests;
 use Crater\Http\Requests\DeleteCustomersRequest;
 use Crater\Http\Resources\CustomerResource;
 use Crater\Models\Customer;
+use Crater\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +34,7 @@ class CustomersController extends Controller
             )
             ->groupBy('customers.id')
             ->leftJoin('invoices', 'customers.id', '=', 'invoices.customer_id')
+            ->where('invoices.status', '!=', Invoice::STATUS_CANCELLED)
             ->paginateData($limit);
 
         return (CustomerResource::collection($customers))
