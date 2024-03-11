@@ -445,8 +445,7 @@ class Invoice extends Model implements HasMedia
         $data['invoice'] = $this->toArray();
         $data['customer'] = $this->customer->toArray();
         $data['company'] = Company::find($this->company_id);
-        $data['subject'] = $this->getEmailString($data['subject']);
-        $data['body'] = $this->getEmailString($data['body']);
+        $data['body'] = $this->getEmailBody($data['body']);
         $data['attach']['data'] = ($this->getEmailAttachmentSetting()) ? $this->getPDFData() : null;
 
         return $data;
@@ -469,7 +468,7 @@ class Invoice extends Model implements HasMedia
         \Mail::to($data['to'])->send(new SendInvoiceMail($data));
 
         if ($this->status == Invoice::STATUS_DRAFT) {
-            $this->status = Invoice::whereCompany;
+            $this->status = Invoice::STATUS_SENT;
             $this->sent = true;
             $this->save();
         }
@@ -569,10 +568,13 @@ class Invoice extends Model implements HasMedia
 
         App::setLocale($locale);
 
-        $logo = $company->logo_path;
+        //$logo = $company->logo_path;
+        $logo = $company->getLogoAttribute();
 
         view()->share([
             'invoice' => $this,
+            'owner' => $this->creator()->get()[0],
+            'company' => $company,
             'customFields' => $customFields,
             'company_address' => $this->getCompanyAddress(),
             'shipping_address' => $this->getCustomerShippingAddress(),
@@ -580,6 +582,9 @@ class Invoice extends Model implements HasMedia
             'notes' => $this->getNotes(),
             'logo' => $logo ?? null,
             'taxes' => $taxes,
+            'titre' => $this->getCustomFieldValueBySlug("CUSTOM_INVOICE_TITLE"),            
+            'company_siret' => $this->company->getCustomFieldValueBySlug("CUSTOM_COMPANY_SIRET"), 
+            'customer_siret' => $this->customer->getCustomFieldValueBySlug("CUSTOM_CUSTOMER_SIRET"), 
         ]);
 
         if (request()->has('preview')) {
@@ -638,7 +643,7 @@ class Invoice extends Model implements HasMedia
         return $this->getFormattedString($this->notes);
     }
 
-    public function getEmailString($body)
+    public function getEmailBody($body)
     {
         $values = array_merge($this->getFieldsArray(), $this->getExtraFields());
 
