@@ -11,10 +11,10 @@ services:
     restart: unless-stopped
     working_dir: /var/www/
     command: ["-c","
-            composer config --no-plugins allow-plugins.pestphp/pest-plugin true && 
-            composer install --no-interaction --prefer-dist --optimize-autoloader && 
-            php artisan storage:link || true && 
-            php artisan key:generate --force && 
+            composer config --no-plugins allow-plugins.pestphp/pest-plugin true &&
+            composer install --no-interaction --prefer-dist --optimize-autoloader &&
+            php artisan storage:link || true &&
+            php artisan key:generate --force &&
             php-fpm",
             ]
     entrypoint: /bin/sh
@@ -25,20 +25,20 @@ services:
         limits:
           memory: 1000m
 
-  db:
-    image: mariadb
-    restart: always
-    environment:
-      MYSQL_USER: crater
-      MYSQL_PASSWORD: crater
-      MYSQL_DATABASE: crater
-      MYSQL_ROOT_PASSWORD: crater
-    ports:
-      - '33006:3306'
-    deploy:
-      resources:
-        limits:
-          memory: 500m
+  # db:
+  #   image: mariadb
+  #   restart: always
+  #   environment:
+  #     MYSQL_USER: crater
+  #     MYSQL_PASSWORD: crater
+  #     MYSQL_DATABASE: crater
+  #     MYSQL_ROOT_PASSWORD: crater
+  #   ports:
+  #     - '33006:3306'
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 500m
 
   nginx:
     image: "${NGINX_IMAGE}"
@@ -54,5 +54,3 @@ services:
   cron:
     image: "${CROND_IMAGE}"
     restart: always
-    
-
