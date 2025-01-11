@@ -6,11 +6,13 @@ use Carbon\Carbon;
 use Crater\Http\Controllers\Controller;
 use Crater\Models\Company;
 use Crater\Models\CompanySetting;
-use Crater\Models\Currency;
 use Crater\Models\Customer;
+use Crater\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use PDF;
+
 
 class CustomerSalesReportController extends Controller
 {
@@ -38,7 +40,8 @@ class CustomerSalesReportController extends Controller
             $query->whereBetween(
                 'invoice_date',
                 [$start->format('Y-m-d'), $end->format('Y-m-d')]
-            );
+            )           
+            ->where(DB::raw('IFNULL(invoices.status, 0)'), '!=', Invoice::STATUS_CANCELLED);
         }])
             ->where('company_id', $company->id)
             ->applyInvoiceFilters($request->only(['from_date', 'to_date']))

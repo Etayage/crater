@@ -508,7 +508,11 @@ float:right;
                 @endif
                 <td width="40%" class="header-section-right invoice-details-container">
                     <h1>{!! $titre !!}</h1>
-                    <h4>@lang('pdf_invoice_label') {{ $invoice->invoice_number }}</h4>
+                    @if ($invoice->status != 'AVOIR')
+                        <h4>@lang('pdf_invoice_label') {{ $invoice->invoice_number }}</h4>
+                    @else
+                        <h4>Facture d'Avoir {{ $invoice->invoice_number }}</h4>
+                    @endif
                     <h4>{{ $invoice->formattedInvoiceDate }}</h4>
                 </td>
             </tr>
