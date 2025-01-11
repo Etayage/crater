@@ -30,6 +30,7 @@ class Invoice extends Model implements HasMedia
     public const STATUS_VIEWED = 'VIEWED';
     public const STATUS_COMPLETED = 'COMPLETED';
     public const STATUS_CANCELLED = 'CANCELLED';
+    public const STATUS_CREDIT = 'AVOIR';
 
 
     public const STATUS_UNPAID = 'UNPAID';
@@ -204,6 +205,10 @@ class Invoice extends Model implements HasMedia
         return $query->whereIn('invoices.paid_status', [
             self::STATUS_UNPAID,
             self::STATUS_PARTIALLY_PAID,
+        ])
+        ->whereNotIn('invoices.status', [
+            self::STATUS_CREDIT,
+            self::STATUS_CANCELLED,
         ]);
     }
 
