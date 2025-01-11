@@ -34,7 +34,7 @@ class CustomersController extends Controller
             )
             ->groupBy('customers.id')
             ->leftJoin('invoices', 'customers.id', '=', 'invoices.customer_id')
-            ->where(DB::raw('IFNULL(invoices.status, 0)'), '!=', Invoice::STATUS_CANCELLED)
+           // ->where(DB::raw('IFNULL(invoices.status, 0)'), '!=', Invoice::STATUS_CANCELLED)
             ->paginateData($limit);
 
         return (CustomerResource::collection($customers))

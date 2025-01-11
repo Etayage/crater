@@ -61,7 +61,7 @@ class CustomerStatsController extends Controller
                 )
                     ->whereCompany()
                     ->whereCustomer($customer->id)
-                    ->where('status', '!=', Invoice::STATUS_CANCELLED)                    
+          //          ->where('status', '!=', Invoice::STATUS_CANCELLED)                    
                     ->sum('total') ?? 0
             );
             array_push(
@@ -104,7 +104,7 @@ class CustomerStatsController extends Controller
         )
             ->whereCompany()
             ->whereCustomer($customer->id)
-            ->where('status', '!=', Invoice::STATUS_CANCELLED)            
+        //    ->where('status', '!=', Invoice::STATUS_CANCELLED)            
             ->sum('total');
         $totalReceipts = Payment::whereBetween(
             'payment_date',

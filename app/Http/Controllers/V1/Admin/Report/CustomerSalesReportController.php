@@ -40,8 +40,8 @@ class CustomerSalesReportController extends Controller
             $query->whereBetween(
                 'invoice_date',
                 [$start->format('Y-m-d'), $end->format('Y-m-d')]
-            )           
-            ->where(DB::raw('IFNULL(invoices.status, 0)'), '!=', Invoice::STATUS_CANCELLED);
+            );           
+        //    ->where(DB::raw('IFNULL(invoices.status, 0)'), '!=', Invoice::STATUS_CANCELLED);
         }])
             ->where('company_id', $company->id)
             ->applyInvoiceFilters($request->only(['from_date', 'to_date']))
